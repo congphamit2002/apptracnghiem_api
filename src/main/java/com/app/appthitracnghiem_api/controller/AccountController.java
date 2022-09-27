@@ -124,4 +124,14 @@ public class AccountController {
         return new ResponseEntity<Accounts>(accountServiceImp.getAccountByID(id), HttpStatus.OK);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<?> getAccountByUsername(@PathVariable("username") String username) {
+        Accounts accounts = accountServiceImp.getAccountByUsername(username);
+
+        if(accounts != null) {
+            System.out.println("Account id" + accounts.getId());
+            return new ResponseEntity<Accounts>(accounts, HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("Username is invalid", HttpStatus.OK);
+    }
 }

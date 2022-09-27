@@ -1,6 +1,9 @@
 package com.app.appthitracnghiem_api.controller;
 
+import com.app.appthitracnghiem_api.pojo.HistoryTestsPojo;
 import com.app.appthitracnghiem_api.service.HistoryTestsServiceImp;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +24,17 @@ public class HistoryTestsController {
     @GetMapping("/{accountID}/{qgroupDetailID}")
     public ResponseEntity<?> getHistoryTestByAccountIDandQGrDetailID(@PathVariable("accountID") int accountID,
                                                                      @PathVariable("qgroupDetailID") int qgroupDetailID) {
-        if (historyTestsServiceImp.getHistoryTestByAccountIDandQGrDetailID(accountID,qgroupDetailID) != null) {
-            return new ResponseEntity<>(historyTestsServiceImp.getHistoryTestByAccountIDandQGrDetailID(accountID,qgroupDetailID), HttpStatus.OK);
-        }
 
+        Gson gson = new Gson();
+        String data = gson.toJson(historyTestsServiceImp.getHistoryTestByAccountIDandQGrDetailID(accountID,qgroupDetailID));
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            HistoryTestsPojo[] historyTestsPojos = mapper.readValue(data, HistoryTestsPojo[].class);
+            return new ResponseEntity<>(historyTestsPojos, HttpStatus.OK);
+        }catch (Exception e) {
+
+        }
         return new ResponseEntity<String>("Fail", HttpStatus.BAD_REQUEST);
     }
 }

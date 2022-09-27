@@ -1,5 +1,6 @@
 package com.app.appthitracnghiem_api.helper;
 
+import com.app.appthitracnghiem_api.entity.QuestionGroupsDetail;
 import com.app.appthitracnghiem_api.entity.Questions;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -21,7 +22,7 @@ public class ExcelHelper {
         return true;
     }
 
-    public static List<Questions> excelToReadQuestion(InputStream is) {
+    public static List<Questions> excelToReadQuestion(InputStream is, int questionGDetailID) {
 
         List<Questions> listQuestions = new ArrayList<Questions>();
         try {
@@ -62,11 +63,14 @@ public class ExcelHelper {
                 if (row.getCell(6) != null) {
                     questions.setCorrectAnswer(row.getCell(6).getStringCellValue());
                 }
+                QuestionGroupsDetail questionGroupsDetail = new QuestionGroupsDetail();
+                questionGroupsDetail.setId(questionGDetailID);
+                questions.setQuestionGroupsDetail(questionGroupsDetail);
                 listQuestions.add(questions);
             }
         } catch (Exception e) {
             // TODO: handle exception
-            throw new RuntimeException("ERROR GET LIST DATA QUESTION");
+            throw new RuntimeException("ERROR IMPORT LIST DATA QUESTION");
         }
         return listQuestions;
     }

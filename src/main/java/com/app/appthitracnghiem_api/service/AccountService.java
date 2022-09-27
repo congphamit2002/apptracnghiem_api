@@ -73,6 +73,11 @@ public class AccountService implements AccountServiceImp{
     }
 
     @Override
+    public Accounts getAccountByUsername(String username) {
+        return accountRepository.findAccountsByUsername(username);
+    }
+
+    @Override
     public Accounts getAccountByID(int id) {
         return accountRepository.findAccountById(id);
     }

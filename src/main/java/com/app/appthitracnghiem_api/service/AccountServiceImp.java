@@ -10,4 +10,5 @@ public interface AccountServiceImp {
     public boolean insertAccount(Accounts account);
     public void deleteAccount(int id);
     public boolean updateAccount(Accounts account);
+    public Accounts getAccountByUsername(String username);
 }

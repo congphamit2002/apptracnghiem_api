@@ -1,6 +1,7 @@
 package com.app.appthitracnghiem_api.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity(name = "comments")

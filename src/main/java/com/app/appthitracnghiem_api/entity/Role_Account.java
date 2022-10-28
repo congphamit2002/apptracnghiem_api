@@ -9,13 +9,13 @@ public class Role_Account {
     RoleAccountID id;
 
     @ManyToOne
-        @MapsId("role_id")
-    @JoinColumn(name = "role_id")
+    @MapsId("roleId")
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Roles role;
 
     @ManyToOne
-    @MapsId("account_id")
-    @JoinColumn(name = "account_id")
+    @MapsId("accountId")
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Accounts account;
 
     public RoleAccountID getId() {

@@ -15,6 +15,9 @@ public class Roles {
     @OneToMany(mappedBy = "role")
     private Set<Role_Account> listRoleAccount;
 
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "roles")
+//    private Set<Accounts> accounts;
+
     public int getId() {
         return id;
     }
@@ -30,4 +33,5 @@ public class Roles {
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
+
 }

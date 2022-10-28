@@ -1,5 +1,6 @@
 package com.app.appthitracnghiem_api.helper;
 
+import com.app.appthitracnghiem_api.entity.Provinces;
 import com.app.appthitracnghiem_api.entity.QuestionGroupsDetail;
 import com.app.appthitracnghiem_api.entity.Questions;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -73,5 +74,29 @@ public class ExcelHelper {
             throw new RuntimeException("ERROR IMPORT LIST DATA QUESTION");
         }
         return listQuestions;
+    }
+
+    public static List<Provinces> excelToProvinces(InputStream is) {
+
+        List<Provinces> listProvinces = new ArrayList<Provinces>();
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+                XSSFRow row = sheet.getRow(i);
+
+                Provinces provinces = new Provinces();
+
+                if (row.getCell(0) != null) {
+                    provinces.setProvinceName(row.getCell(0).getStringCellValue());
+                }
+                listProvinces.add(provinces);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            throw new RuntimeException("ERROR IMPORT LIST DATA QUESTION");
+        }
+        return listProvinces;
     }
 }

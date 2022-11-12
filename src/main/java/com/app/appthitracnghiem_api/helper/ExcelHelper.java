@@ -23,7 +23,7 @@ public class ExcelHelper {
         return true;
     }
 
-    public static List<Questions> excelToReadQuestion(InputStream is, int questionGDetailID) {
+    public static List<Questions> excelToQuestions(InputStream is, int questionGDetailID) {
 
         List<Questions> listQuestions = new ArrayList<Questions>();
         try {

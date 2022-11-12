@@ -25,16 +25,6 @@ public class QuestionGroupsDetailController {
 
     @GetMapping("/getQGrDetailByQGrId/{id}")
     public ResponseEntity<?> getQGrDetailByQGrId(@PathVariable("id") int id) {
-//        try {
-//            System.out.println("OKE");
-//            if(questionGroupsDetailServiceImp.getQGrDetailByQGrID(id) != null) {
-//                return new ResponseEntity<List<QuestionGroupsDetail>>(questionGroupsDetailServiceImp.getQGrDetailByQGrID(id), HttpStatus.OK);
-//            }
-//            return new ResponseEntity<String>("Question Group Detail is invalid", HttpStatus.BAD_REQUEST);
-//
-//        }catch (Exception e) {
-//            return new ResponseEntity<String>("Question Group Detail is invalid", HttpStatus.BAD_REQUEST);
-//        }
 
         try {
             Gson gson = new Gson();

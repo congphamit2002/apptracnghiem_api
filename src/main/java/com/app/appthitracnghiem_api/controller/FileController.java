@@ -13,23 +13,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/file")
+@RequestMapping("/api/file")
 public class FileController {
 
 	@Autowired
 	FileSystemStorageServiceImp fileSystemStorageServiceImp;
 
+	public String getPathReal(String path) {
+		String pathReal = "";
+		switch (path) {
+			case "subjectImage":
+			{
+
+				pathReal = Constant.subjectImage;
+				break;
+			}
+			case "subjectExcel":
+			{
+				pathReal = Constant.subjectExcel;
+				break;
+			}
+			default:
+				break;
+		}
+		System.out.println("\t\t\tPathReal " + pathReal);
+		System.out.println("\t\t\tPathReal " + Constant.subjectImage);
+		return pathReal;
+	}
+
 	@GetMapping("/{path}/{fileName}")
 	public ResponseEntity<Resource> getFile(@PathVariable("path") String path,
 
 			@PathVariable("fileName") String fileName) {
-
-		String pathReal = "";
-		switch (path) {
-		default:
-			break;
-		}
-
+		String pathReal = getPathReal(path);
+		System.out.println("\t\tPath " + path);
+		System.out.println("\t\tFilename " + fileName);
+		System.out.println("\t\tPath real " + pathReal);
 		Resource file = fileSystemStorageServiceImp.load(fileName, pathReal);
 
 		return ResponseEntity.ok()

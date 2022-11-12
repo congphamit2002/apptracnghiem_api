@@ -19,7 +19,7 @@ public class HistoryTests {
     private Date time;
 
     @Column(name = "score")
-    private int score;
+    private double  score;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
@@ -61,11 +61,11 @@ public class HistoryTests {
         this.time = time;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

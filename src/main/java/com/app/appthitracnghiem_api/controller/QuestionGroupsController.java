@@ -2,6 +2,7 @@ package com.app.appthitracnghiem_api.controller;
 
 import com.app.appthitracnghiem_api.entity.QuestionGroups;
 import com.app.appthitracnghiem_api.entity.Subjects;
+import com.app.appthitracnghiem_api.payload.QuestionGrRespone;
 import com.app.appthitracnghiem_api.service.QuestionGroupsServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,9 @@ public class QuestionGroupsController {
     @GetMapping("/getQGBySubjectId/{id}")
     public ResponseEntity<?> getQGBySubjectId(@PathVariable("id") int id) {
         try {
-            List<QuestionGroups> list = questionGroupsServiceImp.getAllQuestionGroupsBySubjectId(id);
+            List<QuestionGrRespone> list = questionGroupsServiceImp.getAllQuestionGroupsBySubjectId(id);
 
-            return new ResponseEntity<List<QuestionGroups>>(list, HttpStatus.OK);
+            return new ResponseEntity<List<QuestionGrRespone>>(list, HttpStatus.OK);
 
         }catch (Exception e) {
             return new ResponseEntity<String>("Subject Id is invalid", HttpStatus.BAD_REQUEST);

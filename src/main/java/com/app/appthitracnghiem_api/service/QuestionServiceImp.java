@@ -11,5 +11,7 @@ public interface QuestionServiceImp{
     //public List<Questions> getAllQuestionByQuestionGroupsDetailId(int id);
     public List<Map<String, ?>> getAllQuestionByQuestionGroupsDetailId(int id);
 
-    public void saveFile(MultipartFile file, int QGrDetailId);
+    public void saveFileExcel( int qGrDetailId, MultipartFile questionFileExcel);
+    public boolean updateFileExcel(int qGrDetailId, MultipartFile questionFileExcel);
+    public boolean deleteQuestionByQGrDetailId(int qGrDetailId);
 }

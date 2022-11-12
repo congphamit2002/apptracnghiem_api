@@ -45,8 +45,12 @@ public class SubjectService implements SubjectServiceImp {
             Subjects subjectUpdate = subjectRepository.findSubjectById(subject.getId());
 
             subjectUpdate.setSubjectName(subject.getSubjectName());
-            subjectUpdate.setImage(subject.getImage());
+            if(subject.getImage() != null)
+                subjectUpdate.setImage(subject.getImage());
 
+            System.out.println("\t\tID " + subject.getId());
+            System.out.println("\t\tSubject name " + subject.getSubjectName());
+            System.out.println("\t\tImage " + subject.getImage());
             Subjects test = subjectRepository.save(subjectUpdate);
             if(test != null){
                 flag = true;
@@ -54,6 +58,7 @@ public class SubjectService implements SubjectServiceImp {
 
             return  flag;
         }catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

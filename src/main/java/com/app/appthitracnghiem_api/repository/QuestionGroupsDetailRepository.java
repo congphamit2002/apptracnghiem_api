@@ -15,4 +15,6 @@ public interface QuestionGroupsDetailRepository extends JpaRepository<QuestionGr
 
     @Query(value = "call getAllQGrDetailByQGrId(:QGrId)", nativeQuery = true)
     List<Map<String, ?>> getAllQGrDetailByQGrId(@Param("QGrId") Integer QGrId);
+
+    public QuestionGroupsDetail findQuestionGroupsDetailById(int id);
 }

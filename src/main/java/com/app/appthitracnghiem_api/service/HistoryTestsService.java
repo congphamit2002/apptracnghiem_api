@@ -1,5 +1,6 @@
 package com.app.appthitracnghiem_api.service;
 
+import com.app.appthitracnghiem_api.entity.HistoryTests;
 import com.app.appthitracnghiem_api.repository.HistoryTestsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,13 @@ public class HistoryTestsService implements HistoryTestsServiceImp{
         } catch (Exception e) {
             return  null;
         }
+    }
+
+    @Override
+    public boolean saveHistoryTest(HistoryTests historyTests) {
+        if(historyTestsRepository.save(historyTests) != null) {
+            return true;
+        }
+        return false;
     }
 }

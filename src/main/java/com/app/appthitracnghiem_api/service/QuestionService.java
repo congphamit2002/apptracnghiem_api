@@ -24,16 +24,41 @@ public class QuestionService implements QuestionServiceImp{
     }
 
     @Override
-    public void saveFile(MultipartFile file, int QGrDetailId) {
+    public void saveFileExcel(int qGrDetailId, MultipartFile questionFileExcel) {
         try {
-            if(ExcelHelper.hasExcelFormat(file)) {
+            if(ExcelHelper.hasExcelFormat(questionFileExcel)) {
 
                 List<Questions> listData = new ArrayList<Questions>();
-                listData = ExcelHelper.excelToReadQuestion(file.getInputStream(), QGrDetailId);
+                listData = ExcelHelper.excelToQuestions(questionFileExcel.getInputStream(), qGrDetailId);
                 questionsRepository.saveAll(listData);
             }
         } catch (Exception e) {
             // TODO: handle exception
+        }
+    }
+
+    @Override
+    public boolean deleteQuestionByQGrDetailId(int qGrDetailId) {
+        try {
+            questionsRepository.deleteQuestionByQGrDetailId(qGrDetailId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateFileExcel(int qGrDetailId, MultipartFile questionFileExcel) {
+        try {
+            if(ExcelHelper.hasExcelFormat(questionFileExcel)) {
+                deleteQuestionByQGrDetailId(qGrDetailId);
+                List<Questions> listData = ExcelHelper.excelToQuestions(questionFileExcel.getInputStream(), qGrDetailId);
+                questionsRepository.saveAll(listData);
+            }
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return false;
         }
     }
 }

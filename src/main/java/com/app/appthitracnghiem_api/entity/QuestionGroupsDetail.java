@@ -13,6 +13,39 @@ public class QuestionGroupsDetail {
     @Column(name = "name_gr_detail")
     private String nameGrDetail;
 
+    @Column(name = "number_question")
+    private int numberQuestions;
+
+    @Column(name = "time")
+    private int time;
+
+    @Column(name = "link_excel")
+    private String linkExcel;
+
+    public String getLinkExcel() {
+        return linkExcel;
+    }
+
+    public void setLinkExcel(String linkExcel) {
+        this.linkExcel = linkExcel;
+    }
+
+    public int getNumberQuestions() {
+        return numberQuestions;
+    }
+
+    public void setNumberQuestions(int numberQuestions) {
+        this.numberQuestions = numberQuestions;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
     @Column(name = "description")
     private String description;
 

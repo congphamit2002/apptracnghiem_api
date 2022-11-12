@@ -17,4 +17,7 @@ public interface QuestionsRepository extends JpaRepository<Questions, Integer> {
 
     @Query(value = "CALL getAllQuestionByQuestionGroupsDetailId(:id);", nativeQuery = true)
     List<Map<String, ?>> getAllQuestionByQuestionGroupsDetailId(@Param("id") Integer id);
+
+    @Query(value = "call deleteQuestionByQGrDetailId(:id)", nativeQuery = true)
+    public void deleteQuestionByQGrDetailId(@Param("id") Integer id);
 }

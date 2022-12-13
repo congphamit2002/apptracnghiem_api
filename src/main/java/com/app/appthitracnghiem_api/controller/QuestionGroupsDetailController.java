@@ -1,8 +1,10 @@
 package com.app.appthitracnghiem_api.controller;
 
+import com.app.appthitracnghiem_api.entity.QuestionGroups;
 import com.app.appthitracnghiem_api.entity.QuestionGroupsDetail;
 import com.app.appthitracnghiem_api.pojo.QuestionGroupDetailPojo;
 import com.app.appthitracnghiem_api.pojo.QuestionPojo;
+import com.app.appthitracnghiem_api.repository.QuestionGroupsDetailRepository;
 import com.app.appthitracnghiem_api.service.QuestionGroupsDetailServiceImp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -23,6 +25,9 @@ public class QuestionGroupsDetailController {
     @Autowired
     QuestionGroupsDetailServiceImp questionGroupsDetailServiceImp;
 
+    @Autowired
+    QuestionGroupsDetailRepository  questionGroupsDetailRepository;
+
     @GetMapping("/getQGrDetailByQGrId/{id}")
     public ResponseEntity<?> getQGrDetailByQGrId(@PathVariable("id") int id) {
 
@@ -37,5 +42,13 @@ public class QuestionGroupsDetailController {
         }catch (Exception e) {
             return new ResponseEntity<String>("Question Group Detail is invalid", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
+        QuestionGroups questionGroups = new QuestionGroups();
+        questionGroups.setId(id);
+        questionGroupsDetailRepository.deleteQuestionGrDeByQGrId(id);
+        return new ResponseEntity<>("OKe", HttpStatus.OK);
     }
 }

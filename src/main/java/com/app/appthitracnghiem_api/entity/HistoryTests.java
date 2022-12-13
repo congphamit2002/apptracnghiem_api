@@ -21,11 +21,11 @@ public class HistoryTests {
     @Column(name = "score")
     private double  score;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "account_id")
     private Accounts account;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "qgroup_detail_id")
     private QuestionGroupsDetail questionGroupsDetail;
 

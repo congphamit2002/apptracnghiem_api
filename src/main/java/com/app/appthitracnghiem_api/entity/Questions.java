@@ -1,5 +1,8 @@
 package com.app.appthitracnghiem_api.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 @Entity(name = "questions")
@@ -29,8 +32,9 @@ public class Questions {
     @Column(name = "correct_answer")
     private String correctAnswer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "qgroup_detail_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private QuestionGroupsDetail questionGroupsDetail;
 
     public int getId() {

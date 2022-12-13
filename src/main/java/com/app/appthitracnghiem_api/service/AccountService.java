@@ -1,6 +1,9 @@
 package com.app.appthitracnghiem_api.service;
 
 import com.app.appthitracnghiem_api.entity.Accounts;
+import com.app.appthitracnghiem_api.entity.Provinces;
+import com.app.appthitracnghiem_api.payload.AccountRespone;
+import com.app.appthitracnghiem_api.payload.AccountUpdateRespone;
 import com.app.appthitracnghiem_api.payload.ChangePasswordRequest;
 import com.app.appthitracnghiem_api.payload.LoginRequest;
 import com.app.appthitracnghiem_api.repository.AccountRepository;
@@ -9,7 +12,9 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountService implements AccountServiceImp{
@@ -21,8 +26,13 @@ public class AccountService implements AccountServiceImp{
     RoleAccountRepository roleAccountRepository;
 
     @Override
-    public List<Accounts> findAll() {
-        return accountRepository.findAll();
+    public ArrayList<Accounts> findAll() {
+        return (ArrayList<Accounts>) accountRepository.findAll();
+    }
+
+    @Override
+    public ArrayList<Map<String, ?>> getAllAccountRespone() {
+        return accountRepository.getAllAccountRespone();
     }
 
     @Override
@@ -30,11 +40,16 @@ public class AccountService implements AccountServiceImp{
 
         try {
             boolean flag = false;
-            String password = account.getPassword();
-            String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
-            account.setPassword(hash);
-            account.setRoleID(1);
-            Accounts test = accountRepository.save(account);
+            Accounts test = new Accounts();
+            try {
+                String password = account.getPassword();
+                String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
+                account.setPassword(hash);
+                account.setRoleID(1);
+                 test = accountRepository.save(account);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
 
             if(test != null) {
 //                Role_Account roleAccount = new Role_Account();
@@ -72,16 +87,25 @@ public class AccountService implements AccountServiceImp{
         try {
             boolean flag = false;
             Accounts accountUpdate  = getAccountByID(account.getId());
+            if(!accountUpdate.getFullname().equals("")) {
+                accountUpdate.setFullname(account.getFullname());
+            }
+            if(!accountUpdate.getEmail().equals("")) {
+                accountUpdate.setEmail(account.getEmail());
+            }
+            if(accountUpdate.getGender() == 0 || accountUpdate.getGender() == 1) {
+                accountUpdate.setGender(account.getGender());
+            }
+            if(!accountUpdate.getPhone().equals("")) {
+                accountUpdate.setPhone(account.getPhone());
 
-            accountUpdate.setUsername(account.getUsername());
-            accountUpdate.setPassword(account.getPassword());
-            accountUpdate.setFullname(account.getFullname());
-            accountUpdate.setEmail(account.getEmail());
-            accountUpdate.setGender(account.getGender());
-            accountUpdate.setPhone(account.getPhone());
-            accountUpdate.setProvince(account.getProvince());
-            accountUpdate.setDateOfBirth(account.getDateOfBirth());
-            accountUpdate.setRoleID(account.getRoleID());
+            }
+            if(accountUpdate.getProvince() != null) {
+                accountUpdate.setProvince(account.getProvince());
+            }
+            if(!accountUpdate.getDateOfBirth().equals("")) {
+                accountUpdate.setDateOfBirth(account.getDateOfBirth());
+            }
             Accounts test = accountRepository.save(accountUpdate);
             if(test != null){
                 flag = true;
@@ -139,9 +163,26 @@ public class AccountService implements AccountServiceImp{
     }
 
     @Override
+    public AccountUpdateRespone getAccountUpdateByID(int id) {
+        Accounts accounts =  accountRepository.findAccountById(id);
+        AccountUpdateRespone accountRespone = new AccountUpdateRespone();
+        accountRespone.setId(accounts.getId());
+        accountRespone.setEmail(accounts.getEmail());
+        accountRespone.setGender(accounts.getGender());
+        accountRespone.setPhone(accounts.getPhone());
+        accountRespone.setFullname(accounts.getFullname());
+        accountRespone.setProvince_id(accounts.getProvince().getId());
+        accountRespone.setDate_of_birth(accounts.getDateOfBirth());
+        accountRespone.setRole_id(accounts.getRoleID());
+        accountRespone.setUsername(accounts.getUsername());
+        return accountRespone;
+    }
+
+    @Override
     public Accounts getAccountByID(int id) {
         return accountRepository.findAccountById(id);
     }
+
 
 
 }

@@ -26,19 +26,19 @@ public class HistoryTestsController {
     @Autowired
     HistoryTestsRepository historyTestsRepository;
 
-    @GetMapping("/{accountID}/{qgroupDetailID}")
-    public ResponseEntity<?> getHistoryTestByAccountIDandQGrDetailID(@PathVariable("accountID") int accountID,
-                                                                     @PathVariable("qgroupDetailID") int qgroupDetailID) {
+    @GetMapping("/{accountID}")
+    public ResponseEntity<?> getHistoryTestByAccountIDandQGrDetailID(@PathVariable("accountID") int accountID) {
 
         //cần fix
-        Gson gson = new Gson();
-        String data = gson.toJson(historyTestsServiceImp.getHistoryTestByAccountIDandQGrDetailID(accountID,qgroupDetailID));
-
-        ObjectMapper mapper = new ObjectMapper();
+//        Gson gson = new Gson();
+//        String data = gson.toJson(historyTestsServiceImp.getHistoryTestByAccountIDandQGrDetailID(accountID,qgroupDetailID));
+//
+//        ObjectMapper mapper = new ObjectMapper();
         try {
-            HistoryTestsPojo[] historyTestsPojos = mapper.readValue(data, HistoryTestsPojo[].class);
+//            HistoryTestsPojo[] historyTestsPojos = mapper.readValue(data, HistoryTestsPojo[].class);
 //            return new ResponseEntity<>(historyTestsPojos, HttpStatus.OK);
-            return new ResponseEntity<>(historyTestsRepository.findAll(), HttpStatus.OK);
+//            return new ResponseEntity<>(historyTestsRepository.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(historyTestsServiceImp.getHistoryTestByAccountIDandQGrDetailID(accountID), HttpStatus.OK);
         }catch (Exception e) {
 
         }
@@ -66,6 +66,16 @@ public class HistoryTestsController {
         }catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Save history test failed ", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<?> deleteHistoryTest(@PathVariable("id") int id) {
+        try {
+            historyTestsServiceImp.deleteHistoryTest(id);
+                return new ResponseEntity<String>("Delete history test successfully", HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<String>("Delete history test failed", HttpStatus.BAD_REQUEST);
         }
     }
 

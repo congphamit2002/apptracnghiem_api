@@ -5,8 +5,16 @@ import java.util.Date;
 public class HistoryTestsPojo {
     private int correct_answer;
     private int incorrect_answer;
-    private int score;
-    private Date time;
+    private double score;
+    private String name_gr_detail;
+
+    public String getNameQuestionGrDe() {
+        return name_gr_detail;
+    }
+
+    public void setNameQuestionGrDe(String nameQuestionGrDe) {
+        this.name_gr_detail = nameQuestionGrDe;
+    }
 
     public int getCorrect_answer() {
         return correct_answer;
@@ -24,19 +32,12 @@ public class HistoryTestsPojo {
         this.incorrect_answer = incorrect_answer;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
 }

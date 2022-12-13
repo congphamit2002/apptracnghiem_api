@@ -58,7 +58,7 @@ public class QuestionGroupsDetail {
     @JoinColumn(name = "question_group_id")
     private QuestionGroups questionGroups;
 
-    @OneToMany(mappedBy = "questionGroupsDetail")
+    @OneToMany(mappedBy = "questionGroupsDetail", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<HistoryTests> listHistoryTests;
 
     public int getId() {

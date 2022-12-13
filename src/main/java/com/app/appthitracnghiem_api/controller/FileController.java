@@ -24,7 +24,6 @@ public class FileController {
 		switch (path) {
 			case "subjectImage":
 			{
-
 				pathReal = Constant.subjectImage;
 				break;
 			}
@@ -33,11 +32,15 @@ public class FileController {
 				pathReal = Constant.subjectExcel;
 				break;
 			}
+			case "questionImages":
+			{
+				pathReal = Constant.questionImages;
+				break;
+			}
 			default:
 				break;
 		}
 		System.out.println("\t\t\tPathReal " + pathReal);
-		System.out.println("\t\t\tPathReal " + Constant.subjectImage);
 		return pathReal;
 	}
 

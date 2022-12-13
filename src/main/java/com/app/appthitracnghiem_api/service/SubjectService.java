@@ -5,6 +5,7 @@ import com.app.appthitracnghiem_api.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,8 +15,8 @@ public class SubjectService implements SubjectServiceImp {
     SubjectRepository subjectRepository;
 
     @Override
-    public List<Subjects> getAllSubject() {
-        return subjectRepository.findAll();
+    public ArrayList<Subjects> getAllSubject() {
+        return (ArrayList<Subjects>) subjectRepository.findAll();
     }
 
     @Override

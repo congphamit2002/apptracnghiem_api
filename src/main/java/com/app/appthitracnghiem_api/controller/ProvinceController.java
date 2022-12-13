@@ -32,7 +32,7 @@ public class ProvinceController {
 
     @GetMapping("/getAllProvince")
     public ResponseEntity<?> getAllProvince(){
-        return  new ResponseEntity<List<Provinces>>(provinceServiceImp.getAllProvince(), HttpStatus.OK);
+        return  new ResponseEntity<ArrayList<Provinces>>(provinceServiceImp.getAllProvince(), HttpStatus.OK);
     }
 
     @PostMapping("/insertProvince")
@@ -66,7 +66,7 @@ public class ProvinceController {
                 try {
                     if(ExcelHelper.hasExcelFormat(fileExcel)) {
 
-                        List<Provinces> listData = new ArrayList<Provinces>();
+                        ArrayList<Provinces> listData = new ArrayList<Provinces>();
                         listData = ExcelHelper.excelToProvinces(fileExcel.getInputStream());
                         provinceRepository.saveAll(listData);
                     }

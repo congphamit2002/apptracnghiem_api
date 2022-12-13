@@ -19,7 +19,7 @@ public class QuestionService implements QuestionServiceImp{
 
 
     @Override
-    public List<Map<String , ?>> getAllQuestionByQuestionGroupsDetailId(int id) {
+    public ArrayList<Map<String ,?>> getAllQuestionByQuestionGroupsDetailId(int id) {
         return questionsRepository.getAllQuestionByQuestionGroupsDetailId(id);
     }
 
@@ -28,7 +28,7 @@ public class QuestionService implements QuestionServiceImp{
         try {
             if(ExcelHelper.hasExcelFormat(questionFileExcel)) {
 
-                List<Questions> listData = new ArrayList<Questions>();
+                ArrayList<Questions> listData = new ArrayList<Questions>();
                 listData = ExcelHelper.excelToQuestions(questionFileExcel.getInputStream(), qGrDetailId);
                 questionsRepository.saveAll(listData);
             }
@@ -38,13 +38,8 @@ public class QuestionService implements QuestionServiceImp{
     }
 
     @Override
-    public boolean deleteQuestionByQGrDetailId(int qGrDetailId) {
-        try {
+    public void deleteQuestionByQGrDetailId(int qGrDetailId) {
             questionsRepository.deleteQuestionByQGrDetailId(qGrDetailId);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     @Override
@@ -52,7 +47,7 @@ public class QuestionService implements QuestionServiceImp{
         try {
             if(ExcelHelper.hasExcelFormat(questionFileExcel)) {
                 deleteQuestionByQGrDetailId(qGrDetailId);
-                List<Questions> listData = ExcelHelper.excelToQuestions(questionFileExcel.getInputStream(), qGrDetailId);
+                ArrayList<Questions> listData = ExcelHelper.excelToQuestions(questionFileExcel.getInputStream(), qGrDetailId);
                 questionsRepository.saveAll(listData);
             }
             return true;

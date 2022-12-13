@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,5 +14,5 @@ import java.util.Map;
 public interface CommentsRepository extends JpaRepository<Comments, Integer> {
 
     @Query(value = "call getAllCmtByQGrDetailId(:QGrDeId)", nativeQuery = true)
-    List<Map<String, ?>> getAllCmtByQGrDetailId(@Param("QGrDeId") int QGrDeId);
+    ArrayList<Map<String, ?>> getAllCmtByQGrDetailId(@Param("QGrDeId") int QGrDeId);
 }

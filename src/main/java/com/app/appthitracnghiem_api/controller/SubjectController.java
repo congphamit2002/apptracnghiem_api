@@ -1,15 +1,17 @@
 package com.app.appthitracnghiem_api.controller;
 
 import com.app.appthitracnghiem_api.common.Constant;
+import com.app.appthitracnghiem_api.entity.QuestionGroups;
+import com.app.appthitracnghiem_api.entity.QuestionGroupsDetail;
 import com.app.appthitracnghiem_api.entity.Subjects;
-import com.app.appthitracnghiem_api.service.FileSystemStorageServiceImp;
-import com.app.appthitracnghiem_api.service.SubjectServiceImp;
+import com.app.appthitracnghiem_api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,11 +22,20 @@ public class SubjectController {
     SubjectServiceImp subjectServiceImp;
 
     @Autowired
+    QuestionServiceImp questionServiceImp;
+
+    @Autowired
+    QuestionGroupsDetailServiceImp questionGroupsDetailServiceImp;
+
+    @Autowired
+    QuestionGroupsServiceImp questionGroupsServiceImp;
+
+    @Autowired
     FileSystemStorageServiceImp fileSystemStorageServiceImp;
 
     @GetMapping("/getAllSubject")
     public ResponseEntity<?> getAllSubject() {
-        return new ResponseEntity<List<Subjects>>(subjectServiceImp.getAllSubject(), HttpStatus.OK);
+        return new ResponseEntity<ArrayList<Subjects>>(subjectServiceImp.getAllSubject(), HttpStatus.OK);
     }
 
     @PostMapping("/insertSubject")
@@ -53,8 +64,24 @@ public class SubjectController {
 
     @GetMapping("/delete/{id}")
     public ResponseEntity<?> deleteSubject(@PathVariable("id") int id) {
-        subjectServiceImp.deleteSubjectById(id);
-        return new ResponseEntity<String>("Delete    Subject Successfully", HttpStatus.OK);
+       try {
+           ArrayList<QuestionGroups> questionGroups = questionGroupsServiceImp.getAllQuestionGroupsBySubjectId(id);
+           for(QuestionGroups itemGr : questionGroups) {
+               ArrayList<QuestionGroupsDetail> questionGroupsDetails = questionGroupsDetailServiceImp.getAllByQGrId(itemGr.getId());
+               for(QuestionGroupsDetail item : questionGroupsDetails) {
+                   questionServiceImp.deleteQuestionByQGrDetailId(item.getId());
+               }
+               questionGroupsDetailServiceImp.deleteQGrDetailByQGrID(itemGr.getId());
+           }
+           questionGroupsServiceImp.deleteQGrBySubjectId(id);
+           subjectServiceImp.deleteSubjectById(id);
+
+           return new ResponseEntity<String>("Delete    Subject Successfully", HttpStatus.OK);
+
+       }catch (Exception e) {
+           e.printStackTrace();
+           return new ResponseEntity<String>("Delete    Subject Failed", HttpStatus.BAD_REQUEST);
+       }
     }
 
     @GetMapping("/getSubject/{id}")

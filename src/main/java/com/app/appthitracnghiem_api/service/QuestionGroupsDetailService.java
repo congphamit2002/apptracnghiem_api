@@ -5,6 +5,7 @@ import com.app.appthitracnghiem_api.repository.QuestionGroupsDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,12 @@ public class QuestionGroupsDetailService implements QuestionGroupsDetailServiceI
     QuestionGroupsDetailRepository questionGroupsDetailRepository;
 
     @Override
-    public List<Map<String,?>> getAllQGrDetailByQGrId(int id) {
+    public ArrayList<Map<String,?>> getAllQGrDetailByQGrId(int id) {
         return questionGroupsDetailRepository.getAllQGrDetailByQGrId(id);
+    }
+
+    public ArrayList<QuestionGroupsDetail> getAllByQGrId(int id) {
+        return questionGroupsDetailRepository.findAllByQuestionGroupsId(id);
     }
 
     @Override
@@ -45,18 +50,13 @@ public class QuestionGroupsDetailService implements QuestionGroupsDetailServiceI
     }
 
     @Override
-    public boolean deleteQGrDetailById(int id) {
-        try {
+    public void deleteQGrDetailById(int id) {
             questionGroupsDetailRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     @Override
-    public boolean deleteQGrDetailByQGrID(int id) {
-        return false;
+    public void deleteQGrDetailByQGrID(int id) {
+            questionGroupsDetailRepository.deleteQuestionGrDeByQGrId(id);
     }
 
     @Override
@@ -67,5 +67,10 @@ public class QuestionGroupsDetailService implements QuestionGroupsDetailServiceI
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public ArrayList<Map<String, ?>> getAllPreviewImageByQGeDId(int id) {
+        return (ArrayList<Map<String, ?>>) questionGroupsDetailRepository.getAllPreviewImageByQGeDId(id);
     }
 }

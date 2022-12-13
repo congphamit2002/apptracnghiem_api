@@ -18,9 +18,9 @@ public class QuestionGroupsService implements QuestionGroupsServiceImp {
     QuestionGroupsRepository questionGroupsRepository;
 
     @Override
-    public List<QuestionGrRespone> getAllQuestionGroupsBySubjectId(int id) {
-        List<QuestionGroups> listData =  questionGroupsRepository.findAllBySubjectId(id);
-        List<QuestionGrRespone> listResult = new ArrayList<>();
+    public ArrayList<QuestionGrRespone> getAllQuestionGroupsResponeBySubjectId(int id) {
+        ArrayList<QuestionGroups> listData =  questionGroupsRepository.findAllBySubjectId(id);
+        ArrayList<QuestionGrRespone> listResult = new ArrayList<>();
         for (QuestionGroups item : listData) {
             QuestionGrRespone questionGrRespone = new QuestionGrRespone();
             questionGrRespone.setId(item.getId());
@@ -32,14 +32,26 @@ public class QuestionGroupsService implements QuestionGroupsServiceImp {
     }
 
     @Override
-    public boolean deleteQGrById(int id) {
-        try {
-            questionGroupsRepository.deleteById(id);
-            return true;
-        }catch (Exception e) {
-            return false;
-        }
+    public ArrayList<QuestionGroups> getAllQuestionGroupsBySubjectId(int id) {
+        return questionGroupsRepository.findAllBySubjectId(id);
     }
+
+    @Override
+    public QuestionGroups getQGrById(int id) {
+        return questionGroupsRepository.findById(id);
+    }
+
+
+    @Override
+    public void deleteQGrById(int id) {
+            questionGroupsRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteQGrBySubjectId(int id) {
+            questionGroupsRepository.deleteQuestionGrBySubjectId(id);
+    }
+
 
     @Override
     public boolean insertQGr(QuestionGroups questionGroups) {

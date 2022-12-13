@@ -23,9 +23,9 @@ public class ExcelHelper {
         return true;
     }
 
-    public static List<Questions> excelToQuestions(InputStream is, int questionGDetailID) {
+    public static ArrayList<Questions> excelToQuestions(InputStream is, int questionGDetailID) {
 
-        List<Questions> listQuestions = new ArrayList<Questions>();
+        ArrayList<Questions> listQuestions = new ArrayList<Questions>();
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(is);
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -76,9 +76,9 @@ public class ExcelHelper {
         return listQuestions;
     }
 
-    public static List<Provinces> excelToProvinces(InputStream is) {
+    public static ArrayList<Provinces> excelToProvinces(InputStream is) {
 
-        List<Provinces> listProvinces = new ArrayList<Provinces>();
+        ArrayList<Provinces> listProvinces = new ArrayList<Provinces>();
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(is);
             XSSFSheet sheet = workbook.getSheetAt(0);

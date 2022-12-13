@@ -4,8 +4,10 @@ import com.app.appthitracnghiem_api.common.Constant;
 import com.app.appthitracnghiem_api.entity.QuestionGroups;
 import com.app.appthitracnghiem_api.entity.QuestionGroupsDetail;
 import com.app.appthitracnghiem_api.entity.Questions;
+import com.app.appthitracnghiem_api.pojo.PreviewQuestionImage;
 import com.app.appthitracnghiem_api.pojo.QuestionGroupDetailPojo;
 import com.app.appthitracnghiem_api.pojo.QuestionPojo;
+import com.app.appthitracnghiem_api.repository.QuestionGroupsDetailRepository;
 import com.app.appthitracnghiem_api.service.FileSystemStorageServiceImp;
 import com.app.appthitracnghiem_api.service.QuestionGroupsDetailServiceImp;
 import com.app.appthitracnghiem_api.service.QuestionServiceImp;
@@ -18,8 +20,11 @@ import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/questions")
@@ -33,6 +38,9 @@ public class QuestionController {
 
     @Autowired
     FileSystemStorageServiceImp fileSystemStorageServiceImp;
+
+    @Autowired
+    QuestionGroupsDetailRepository questionGroupsDetailRepository;
 
     @GetMapping("/getQGrDetailByQGrId/{id}")
     public ResponseEntity<?> getQGrDetailByQGrId(@PathVariable("id") int id) {
@@ -75,7 +83,7 @@ public class QuestionController {
     public ResponseEntity<?> getAllQuestionByQuestionGroupsDetailId (@PathVariable("id") int id) {
 
         try {
-            List<Map<String, ?>> list = questionServiceImp.getAllQuestionByQuestionGroupsDetailId(id);
+            ArrayList<Map<String, ?>> list = questionServiceImp.getAllQuestionByQuestionGroupsDetailId(id);
             Gson gson = new Gson();
             String data = gson.toJson(list);
             ObjectMapper mapper = new ObjectMapper();
@@ -86,6 +94,40 @@ public class QuestionController {
         }
 
     }
+
+
+    //get All file preview image of listen test
+	@GetMapping("/previewImage/{id}")
+	public ResponseEntity<?> getAllPreviewQuestionImage(@PathVariable("id") int id, HttpServletRequest httpServletRequest) {
+
+		ArrayList<Map<String, ?>> listData =  questionGroupsDetailServiceImp.getAllPreviewImageByQGeDId(id);
+		ObjectMapper mapper = new ObjectMapper();
+        Gson gson = new Gson();
+		String data = gson.toJson(listData);
+
+		try {
+			PreviewQuestionImage[] listenImageQuestion = mapper.readValue(data, PreviewQuestionImage[].class);
+            ArrayList<PreviewQuestionImage> listResult = new ArrayList<>();
+			for(PreviewQuestionImage image : listenImageQuestion) {
+                if(Objects.nonNull(image)) {  //check object null
+                    if(!image.getImage().trim().equals("")) {
+                        String imagePath = "http://" + httpServletRequest.getServerName() + ":"
+                                + httpServletRequest.getServerPort() + "/api/file/questionImages/" + image.getImage();
+                        PreviewQuestionImage previewQuestionImage = new PreviewQuestionImage();
+                        previewQuestionImage.setImage(imagePath);
+                        listResult.add(previewQuestionImage);
+                    }
+                }
+
+			}
+			return new ResponseEntity<>(listResult, HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>("FAILED", HttpStatus.BAD_REQUEST);
+	}
+
+
 
     @PostMapping("/saveFile")
     public ResponseEntity<?> saveFileQuestions(
@@ -196,7 +238,8 @@ public class QuestionController {
 
     @GetMapping("/deleteByQGrDId/{qGrDId}")
     public ResponseEntity<?> deleteByQGrDId(@PathVariable("qGrDId") int qGrDId) {
-        try {questionServiceImp.deleteQuestionByQGrDetailId(qGrDId);
+        try {
+                questionServiceImp.deleteQuestionByQGrDetailId(qGrDId);
                 questionGroupsDetailServiceImp.deleteQGrDetailById(qGrDId);
                 return new ResponseEntity<>("DELETE QUESTION SUCCESSFULLY", HttpStatus.OK );
         }catch (Exception e) {
@@ -204,4 +247,15 @@ public class QuestionController {
             return new ResponseEntity<>("DELETE QUESTION FAILED", HttpStatus.BAD_REQUEST );
         }
     }
+
+    @GetMapping("/test/{id}")
+    public ResponseEntity<?> test(@PathVariable("id") int id) {
+        try {
+            return new ResponseEntity<>(questionGroupsDetailServiceImp.getAllByQGrId(id), HttpStatus.OK );
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("DELETE QUESTION FAILED", HttpStatus.BAD_REQUEST );
+        }
+    }
+
 }

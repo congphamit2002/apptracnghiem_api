@@ -5,6 +5,7 @@ import com.app.appthitracnghiem_api.repository.ProvinceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,8 +15,8 @@ public class ProvinceService implements ProvinceServiceImp{
     ProvinceRepository provinceRepository;
 
     @Override
-    public List<Provinces> getAllProvince() {
-        return provinceRepository.findAll();
+    public ArrayList<Provinces> getAllProvince() {
+        return (ArrayList<Provinces>) provinceRepository.findAll();
     }
 
     @Override

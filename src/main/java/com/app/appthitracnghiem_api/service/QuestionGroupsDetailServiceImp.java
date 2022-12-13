@@ -2,18 +2,22 @@ package com.app.appthitracnghiem_api.service;
 
 import com.app.appthitracnghiem_api.entity.QuestionGroupsDetail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public interface QuestionGroupsDetailServiceImp {
 
-    public List<Map<String, ?>>  getAllQGrDetailByQGrId(int id);
+    public ArrayList<Map<String, ?>> getAllQGrDetailByQGrId(int id);
 
     public QuestionGroupsDetail insertQGrDetail(QuestionGroupsDetail questionGroupsDetail);
     public boolean updateQGrDetail(QuestionGroupsDetail questionGroupsDetail);
-    public boolean deleteQGrDetailById(int id);
-    public boolean deleteQGrDetailByQGrID(int id);
+    public void deleteQGrDetailById(int id);
+    public void deleteQGrDetailByQGrID(int id);
+
+    public ArrayList<QuestionGroupsDetail> getAllByQGrId(int id);
 
     public QuestionGroupsDetail getQGrDetailById(int id);
+    public ArrayList<Map<String, ?>> getAllPreviewImageByQGeDId(int id);
 
 }

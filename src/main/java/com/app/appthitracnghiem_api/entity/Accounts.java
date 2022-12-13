@@ -29,7 +29,7 @@ public class Accounts {
     private int gender;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     @Column(name = "email")
     private String email;
@@ -49,7 +49,7 @@ public class Accounts {
     @OneToMany(mappedBy = "account")
     private Set<HistoryTests> listHistoryTests;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private Set<Role_Account> listRoleAccount;
 
 //     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -109,11 +109,11 @@ public class Accounts {
         this.gender = gender;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -158,4 +158,11 @@ public class Accounts {
         this.province = province;
     }
 
+    public Set<Role_Account> getListRoleAccount() {
+        return listRoleAccount;
+    }
+
+    public void setListRoleAccount(Set<Role_Account> listRoleAccount) {
+        this.listRoleAccount = listRoleAccount;
+    }
 }

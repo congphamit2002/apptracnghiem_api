@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,11 +39,13 @@ public class AccountController {
     @Autowired
     JwtProvider jwtProvider;
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/getAllAccount")
     public ResponseEntity<?> getAllAccount(){
         return new ResponseEntity<ArrayList<Map<String, ?>>>(accountServiceImp.getAllAccountRespone(), HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/deleteAccount/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable("id") int id){
         try {
@@ -53,6 +56,7 @@ public class AccountController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping("/updateAccount")
     public ResponseEntity<?> updateAccount(@RequestBody AccountUpRequest accountsUp){
         try {
@@ -62,7 +66,7 @@ public class AccountController {
             accounts.setPhone(accountsUp.getPhone());
             accounts.setGender(accountsUp.getGender());
             accounts.setDateOfBirth(accountsUp.getDate_of_birth());
-            accounts.setEmail(accountsUp.getEmail());
+            accounts.setPassword(accountsUp.getPassword());
             Provinces provinces = new Provinces();
             provinces.setId(accountsUp.getProvince_id());
             accounts.setProvince(provinces);
@@ -79,14 +83,14 @@ public class AccountController {
         }
     }
 
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("update/{id}")
     public ResponseEntity<?> getAccountUpdateByID(@PathVariable("id") int id) {
 
         //return new ResponseEntity<Account>(accountServiceImp.getAccountByID(id), HttpStatus.OK);
         return new ResponseEntity<AccountUpdateRespone>(accountServiceImp.getAccountUpdateByID(id), HttpStatus.OK);
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/username/{username}")
     public ResponseEntity<?> getAccountByUsername(@PathVariable("username") String username) {
         Accounts accounts = accountServiceImp.getAccountByUsername(username);
@@ -98,10 +102,23 @@ public class AccountController {
         return new ResponseEntity<String>("Username is invalid", HttpStatus.OK);
     }
 
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping("/insertAccount")
     public ResponseEntity<?> insertAccount(@RequestBody Accounts accounts){
         try {
+
+            if(accountServiceImp.existUserByUsername(accounts.getUsername())) {
+                return new ResponseEntity<>("Tên đăng nhập đã tồn tại", HttpStatus.BAD_REQUEST);
+            }
+
+            if(accountServiceImp.existUserByEmail(accounts.getEmail())) {
+                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
+            }
+
+            if(accountServiceImp.existUserByPhone(accounts.getPhone())) {
+                return new ResponseEntity<>("Số điện thoại đã tồn tại", HttpStatus.BAD_REQUEST);
+            }
+
             if(accountServiceImp.insertAccount(accounts)) {
                 return new ResponseEntity<String>("Insert Successfully", HttpStatus.OK);
                 //return new ResponseEntity<Accounts>(accountServiceImp.getAccountByID(1), HttpStatus.OK);
@@ -113,7 +130,7 @@ public class AccountController {
             return new ResponseEntity<String>("Insert Fail", HttpStatus.BAD_REQUEST);
         }
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         try {

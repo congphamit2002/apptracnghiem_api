@@ -49,8 +49,6 @@ public class QuestionGroupsDetail {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "questionGroupsDetail")
-    private Set<Comments> listComments;
 
     @OneToMany(mappedBy = "questionGroupsDetail")
     private Set<Questions> listQuestions;

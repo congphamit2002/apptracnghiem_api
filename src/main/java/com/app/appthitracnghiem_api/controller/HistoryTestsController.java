@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class HistoryTestsController {
 
     @Autowired
     HistoryTestsRepository historyTestsRepository;
-
+    @Secured({"ROLE_USER"})
     @GetMapping("/{accountID}")
     public ResponseEntity<?> getHistoryTestByAccountIDandQGrDetailID(@PathVariable("accountID") int accountID) {
 
@@ -44,7 +45,7 @@ public class HistoryTestsController {
         }
         return new ResponseEntity<String>("Fail", HttpStatus.BAD_REQUEST);
     }
-
+    @Secured({ "ROLE_USER"})
     @PostMapping("/save")
     public ResponseEntity<?> saveHistoryTest(@RequestBody HistoryTestRequest historyTestsRequeset) {
         try {
@@ -69,6 +70,7 @@ public class HistoryTestsController {
         }
     }
 
+    @Secured({"ROLE_USER"})
     @GetMapping("/delete/{id}")
     public ResponseEntity<?> deleteHistoryTest(@PathVariable("id") int id) {
         try {

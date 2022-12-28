@@ -7,6 +7,9 @@ import com.app.appthitracnghiem_api.repository.RoleAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class RoleAccountService implements RoleAccountServiceImp{
 
@@ -26,5 +29,10 @@ public class RoleAccountService implements RoleAccountServiceImp{
         if(test != null)
             return  true;
         return false;
+    }
+
+    @Override
+    public List<Map<String, ?>> getAllRolesByUsername(String username) {
+        return roleAccountRepository.getAllRolesByUsername(username);
     }
 }

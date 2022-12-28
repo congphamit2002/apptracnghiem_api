@@ -10,6 +10,7 @@ import com.app.appthitracnghiem_api.service.QuestionServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ public class QuestionGroupsController {
 
     @Autowired
     QuestionServiceImp questionServiceImp;
-
-            @GetMapping("/getAllQGBySubjectId/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @GetMapping("/getAllQGBySubjectId/{id}")
     public ResponseEntity<?> getQGBySubjectId(@PathVariable("id") int id) {
         try {
             ArrayList<QuestionGrRespone> list = questionGroupsServiceImp.getAllQuestionGroupsResponeBySubjectId(id);
@@ -39,7 +40,7 @@ public class QuestionGroupsController {
             return new ResponseEntity<String>("Subject Id is invalid", HttpStatus.BAD_REQUEST);
         }
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/getQGById/{id}")
     public ResponseEntity<?> getQGById(@PathVariable("id") int id) {
         try {
@@ -52,6 +53,7 @@ public class QuestionGroupsController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/delete/{id}")
     public ResponseEntity<?> deleteQGrById(@PathVariable("id") int id) {
         try {
@@ -68,14 +70,20 @@ public class QuestionGroupsController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/insert")
     public ResponseEntity<?> insertQGr (@RequestParam("subjectId") int subjectId,
                                         @RequestParam("nameGroup") String nameGroup) {
+        if(nameGroup.contains(",")) {
+            String[] list = nameGroup.split(",");
+            nameGroup = list[0];
+        }
         QuestionGroups questionGroups = new QuestionGroups();
         questionGroups.setNameGroup(nameGroup);
         Subjects subjects = new Subjects();
         subjects.setId(subjectId);
         questionGroups.setSubject(subjects);
+
 
         if(questionGroupsServiceImp.insertQGr(questionGroups)) {
             return new ResponseEntity<String>("Insert Question Group Successfully", HttpStatus.OK);
@@ -84,10 +92,15 @@ public class QuestionGroupsController {
 
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/update")
     public ResponseEntity<?> updateQGr (@RequestParam("id") int id,
                                         @RequestParam("subjectId") int subjectId,
                                         @RequestParam("nameGroup") String nameGroup) {
+        if(nameGroup.contains(",")) {
+            String[] list = nameGroup.split(",");
+            nameGroup = list[0];
+        }
         QuestionGroups questionGroups = new QuestionGroups();
         questionGroups.setId(id);
         questionGroups.setNameGroup(nameGroup);

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -36,13 +37,13 @@ public class CustomUserDetailService implements UserDetailsService {
 		
 		
 		//cacsh 1
-//		List<Map<String, ?>> listRole = roleUserServiceImp.getAllRolesByUserName(username);
-//		
-//		for (Map<String, ?> map : listRole) {
-//			System.out.println("Kiem tra role " + map.get("role_name"));
-//			SimpleGrantedAuthority role = new SimpleGrantedAuthority(map.get("role_name").toString());
-//			roles.add(role);
-//		}
+		List<Map<String, ?>> listRole = roleAccountServiceImp.getAllRolesByUsername(username);
+
+		for (Map<String, ?> map : listRole) {
+			System.out.println("Kiem tra role " + map.get("role_name"));
+			SimpleGrantedAuthority role = new SimpleGrantedAuthority(map.get("role_name").toString());
+			roles.add(role);
+		}
 		
 		
 		//cachs 2
@@ -55,11 +56,11 @@ public class CustomUserDetailService implements UserDetailsService {
 //		}
 		
 		//cách 3 :
-		for (Role_Account roleAccount : accounts.getListRoleAccount()) {
-			System.out.println("Kiem tra role " + roleAccount.getRole().getRoleName());
-			SimpleGrantedAuthority role = new SimpleGrantedAuthority( roleAccount.getRole().getRoleName());
-			roles.add(role);
-		}
+//		for (Role_Account roleAccount : accounts.getListRoleAccount()) {
+//			System.out.println("Kiem tra role " + roleAccount.getRole().getRoleName());
+//			SimpleGrantedAuthority role = new SimpleGrantedAuthority( roleAccount.getRole().getRoleName());
+//			roles.add(role);
+//		}
 
 //		SimpleGrantedAuthority role = new SimpleGrantedAuthority( "ROLE_ADMIN");
 //		roles.add(role);

@@ -57,10 +57,6 @@ public class Accounts {
 //             joinColumns = {@JoinColumn(name ="account_id")},
 //            inverseJoinColumns = {@JoinColumn(name = "role_id")})
 //     private Set<Roles> roles;
-
-    @OneToMany(mappedBy = "accounts")
-    private Set<Comments> listComments;
-
     public int getId() {
         return id;
     }

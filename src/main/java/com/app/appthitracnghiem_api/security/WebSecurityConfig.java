@@ -15,10 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.ServletException;
 import java.util.Arrays;
 
 
@@ -68,9 +70,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.authorizeHttpRequests()
 				.antMatchers("/api/account/insertAccount").permitAll()
 				.antMatchers("/api/province/getAllProvince").permitAll()
+				.antMatchers("/api/file/*/*").permitAll()
 		.antMatchers("/api/v1/login").permitAll()
 		.anyRequest().authenticated()
-		.and().addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+				.and()
+				.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean

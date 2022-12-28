@@ -11,6 +11,7 @@ import com.app.appthitracnghiem_api.service.ProvinceServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,12 +30,12 @@ public class ProvinceController {
 
     @Autowired
     ProvinceRepository provinceRepository;
-
     @GetMapping("/getAllProvince")
     public ResponseEntity<?> getAllProvince(){
         return  new ResponseEntity<ArrayList<Provinces>>(provinceServiceImp.getAllProvince(), HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/insertProvince")
     public ResponseEntity<?> insertProvince(@RequestParam("provinceName") String provinceName) {
         Provinces province = new Provinces();
@@ -56,8 +57,9 @@ public class ProvinceController {
         return new ResponseEntity<String>("Province ID is invalid", HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/saveFile")
-    public ResponseEntity<?> saveFileFullTest(
+    public ResponseEntity<?> saveFileProvinces(
             @RequestParam MultipartFile fileExcel) {
 
         try {

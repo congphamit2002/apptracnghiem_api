@@ -11,12 +11,13 @@ import java.util.Map;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Accounts, Integer> {
-
     public Accounts findAccountById(int id);
     public Accounts findAccountsByUsername(String username);
-
     @Query(value = "call getAllAccountRespone()", nativeQuery = true)
     ArrayList<Map<String, ?>> getAllAccountRespone();
+    public Boolean existsAccountsByUsername(String username);
+    public Boolean existsAccountsByEmail(String email);
+    public boolean existsAccountsByPhone(String phone);
 
 
 }

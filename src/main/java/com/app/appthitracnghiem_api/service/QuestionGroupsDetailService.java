@@ -73,4 +73,9 @@ public class QuestionGroupsDetailService implements QuestionGroupsDetailServiceI
     public ArrayList<Map<String, ?>> getAllPreviewImageByQGeDId(int id) {
         return (ArrayList<Map<String, ?>>) questionGroupsDetailRepository.getAllPreviewImageByQGeDId(id);
     }
+
+    @Override
+    public String findLinkExcelByQGRDid(int id) {
+        return questionGroupsDetailRepository.findQuestionGroupsDetailById(id).getLinkExcel();
+    }
 }

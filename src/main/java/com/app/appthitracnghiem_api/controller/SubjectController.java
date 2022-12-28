@@ -8,6 +8,7 @@ import com.app.appthitracnghiem_api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,17 +33,26 @@ public class SubjectController {
 
     @Autowired
     FileSystemStorageServiceImp fileSystemStorageServiceImp;
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/getAllSubject")
     public ResponseEntity<?> getAllSubject() {
-        return new ResponseEntity<ArrayList<Subjects>>(subjectServiceImp.getAllSubject(), HttpStatus.OK);
+        ArrayList<Subjects> listResult = subjectServiceImp.getAllSubject();
+        for(Subjects subjects : listResult) {
+            subjects.setImage("/api/file/subjectImage/" +subjects.getImage());
+        }
+        return new ResponseEntity<ArrayList<Subjects>>(listResult, HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/insertSubject")
     public ResponseEntity<?> insertSubject(@RequestParam("subjectName") String subjectName,
                                            @RequestParam("image")MultipartFile image) {
 
         try {
+            if(subjectName.contains(",")) {
+                String[] list = subjectName.split(",");
+                subjectName = list[0];
+            }
             fileSystemStorageServiceImp.init(Constant.subjectImage);
             System.out.println("\t\tSubject name " + subjectName);
             Subjects subject = new Subjects();
@@ -62,6 +72,7 @@ public class SubjectController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/delete/{id}")
     public ResponseEntity<?> deleteSubject(@PathVariable("id") int id) {
        try {
@@ -95,12 +106,17 @@ public class SubjectController {
         return new ResponseEntity<String>("Subject ID is invalid", HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/updateSubject")
     public ResponseEntity<?> updateSubject(@RequestParam("id") int id,
                                            @RequestParam("subjectName") String subjectName,
                                            @RequestParam("image") MultipartFile image) {
 
         try {
+            if(subjectName.contains(",")) {
+                String[] list = subjectName.split(",");
+                subjectName = list[0];
+            }
             Subjects subject = new Subjects();
             subject.setId(id);
             subject.setSubjectName(subjectName);

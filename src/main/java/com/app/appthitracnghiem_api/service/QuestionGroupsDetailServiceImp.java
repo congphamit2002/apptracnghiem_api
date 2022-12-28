@@ -19,5 +19,5 @@ public interface QuestionGroupsDetailServiceImp {
 
     public QuestionGroupsDetail getQGrDetailById(int id);
     public ArrayList<Map<String, ?>> getAllPreviewImageByQGeDId(int id);
-
+    public String findLinkExcelByQGRDid(int id);
 }

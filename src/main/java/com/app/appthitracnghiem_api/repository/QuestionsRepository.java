@@ -23,4 +23,5 @@ public interface QuestionsRepository extends JpaRepository<Questions, Integer> {
     @Modifying
     @Transactional
     public void deleteQuestionByQGrDetailId(@Param("id") Integer id);
+    public Questions findQuestionsById(int id);
 }

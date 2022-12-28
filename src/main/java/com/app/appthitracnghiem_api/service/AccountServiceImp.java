@@ -20,5 +20,8 @@ public interface AccountServiceImp {
     public Accounts getAccountByUsername(String username);
     public boolean changePassword(ChangePasswordRequest changePasswordRequest);
     public boolean login(LoginRequest request);
+    public boolean existUserByUsername(String username);
+    public boolean existUserByEmail(String email);
+    public boolean existUserByPhone(String phone);
 
 }

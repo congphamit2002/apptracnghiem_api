@@ -8,6 +8,15 @@ public class QuestionPojo {
     private String option3;
     private String option4;
     private String correct_answer;
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public int getNum() {
         return num;

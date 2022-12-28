@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class AccountService implements AccountServiceImp{
@@ -52,16 +53,6 @@ public class AccountService implements AccountServiceImp{
             }
 
             if(test != null) {
-//                Role_Account roleAccount = new Role_Account();
-//                Roles roleSet = new Roles();
-//                roleSet.setId(test.getRoleID());
-//                Accounts accountSet = new Accounts();
-//                accountSet.setId(test.getId());
-//                roleAccount.setRole(roleSet);
-//                roleAccount.setAccount(accountSet);
-//                if(roleAccountRepository.save(roleAccount) != null) {
-//                    flag = true;
-//                }
                 flag = true;
 
             }
@@ -87,25 +78,32 @@ public class AccountService implements AccountServiceImp{
         try {
             boolean flag = false;
             Accounts accountUpdate  = getAccountByID(account.getId());
-            if(!accountUpdate.getFullname().equals("")) {
+            if(!account.getFullname().equals("")) {
                 accountUpdate.setFullname(account.getFullname());
             }
-            if(!accountUpdate.getEmail().equals("")) {
-                accountUpdate.setEmail(account.getEmail());
-            }
-            if(accountUpdate.getGender() == 0 || accountUpdate.getGender() == 1) {
+            if(account.getGender() == 0 || account.getGender() == 1) {
                 accountUpdate.setGender(account.getGender());
             }
-            if(!accountUpdate.getPhone().equals("")) {
+            if(!account.getPhone().equals("")) {
                 accountUpdate.setPhone(account.getPhone());
 
             }
-            if(accountUpdate.getProvince() != null) {
+            if(account.getProvince() != null) {
                 accountUpdate.setProvince(account.getProvince());
             }
-            if(!accountUpdate.getDateOfBirth().equals("")) {
+            if(!account.getDateOfBirth().equals("")) {
                 accountUpdate.setDateOfBirth(account.getDateOfBirth());
             }
+
+            if(Objects.nonNull(account.getPassword()) ) {
+                if(!account.getPassword().equals("")) {
+
+                    String newHash = BCrypt.hashpw(account.getPassword(), BCrypt.gensalt(12));
+
+                    accountUpdate.setPassword(newHash);
+                }
+            }
+
             Accounts test = accountRepository.save(accountUpdate);
             if(test != null){
                 flag = true;
@@ -160,6 +158,21 @@ public class AccountService implements AccountServiceImp{
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean existUserByUsername(String username) {
+        return accountRepository.existsAccountsByUsername(username);
+    }
+
+    @Override
+    public boolean existUserByEmail(String email) {
+        return accountRepository.existsAccountsByEmail(email);
+    }
+
+    @Override
+    public boolean existUserByPhone(String phone) {
+        return accountRepository.existsAccountsByPhone(phone);
     }
 
     @Override

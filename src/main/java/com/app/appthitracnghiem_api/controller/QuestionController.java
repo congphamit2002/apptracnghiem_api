@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.support.SimpleTriggerContext;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +42,7 @@ public class QuestionController {
 
     @Autowired
     QuestionGroupsDetailRepository questionGroupsDetailRepository;
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/getQGrDetailByQGrId/{id}")
     public ResponseEntity<?> getQGrDetailByQGrId(@PathVariable("id") int id) {
 
@@ -57,7 +58,7 @@ public class QuestionController {
             return new ResponseEntity<String>("Question Group Detail is invalid", HttpStatus.BAD_REQUEST);
         }
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/getQGrDetailById/{id}")
     public ResponseEntity<?> getQGrDetailById(@PathVariable("id") int id) {
 
@@ -78,7 +79,7 @@ public class QuestionController {
             return new ResponseEntity<String>("Question Group Detail ID is invalid", HttpStatus.BAD_REQUEST);
         }
     }
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/questionDetailID/{id}")
     public ResponseEntity<?> getAllQuestionByQuestionGroupsDetailId (@PathVariable("id") int id) {
 
@@ -88,6 +89,9 @@ public class QuestionController {
             String data = gson.toJson(list);
             ObjectMapper mapper = new ObjectMapper();
             QuestionPojo[] listQuestion = mapper.readValue(data, QuestionPojo[].class);
+            for (QuestionPojo questionPojo : listQuestion) {
+                questionPojo.setImage("/api/file/questionImages/" + questionPojo.getImage());
+            }
             return new ResponseEntity<QuestionPojo[]>(listQuestion, HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<String>("Question Groups Detail Id is invalid", HttpStatus.BAD_REQUEST);
@@ -97,6 +101,7 @@ public class QuestionController {
 
 
     //get All file preview image of listen test
+    @Secured("ROLE_ADMIN")
 	@GetMapping("/previewImage/{id}")
 	public ResponseEntity<?> getAllPreviewQuestionImage(@PathVariable("id") int id, HttpServletRequest httpServletRequest) {
 
@@ -128,7 +133,7 @@ public class QuestionController {
 	}
 
 
-
+    @Secured("ROLE_ADMIN")
     @PostMapping("/saveFile")
     public ResponseEntity<?> saveFileQuestions(
             @RequestParam("grDetailName") String grDetailName,
@@ -142,6 +147,15 @@ public class QuestionController {
        try {
            fileSystemStorageServiceImp.init(Constant.questionExcel);
            fileSystemStorageServiceImp.init(Constant.questionImages);
+
+           if(grDetailName.contains(",")) {
+               String[] list = grDetailName.split(",");
+               grDetailName = list[0];
+           }
+           if(grDetaillDescription.contains(",")) {
+               String[] list = grDetaillDescription.split(",");
+               grDetaillDescription = list[0];
+           }
 
            QuestionGroupsDetail questionGroupsDetail = new QuestionGroupsDetail();
            questionGroupsDetail.setNumberQuestions(grDetailCount);
@@ -174,6 +188,7 @@ public class QuestionController {
        }
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/updateFile")
     public ResponseEntity<?> updateFileQuestions( @RequestParam("grDetailId") int grDetailId,
                                                   @RequestParam("grDetailName") String grDetailName,
@@ -191,6 +206,14 @@ public class QuestionController {
             System.out.println("\t\t" + grDetailDescription);
             fileSystemStorageServiceImp.init(Constant.questionExcel);
             fileSystemStorageServiceImp.init(Constant.questionImages);
+            if(grDetailName.contains(",")) {
+                String[] list = grDetailName.split(",");
+                grDetailName = list[0];
+            }
+            if(grDetailDescription.contains(",")) {
+                String[] list = grDetailDescription.split(",");
+                grDetailDescription = list[0];
+            }
 
             QuestionGroupsDetail questionGroupsDetail = new QuestionGroupsDetail();
             questionGroupsDetail.setId(grDetailId);
@@ -236,6 +259,7 @@ public class QuestionController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/deleteByQGrDId/{qGrDId}")
     public ResponseEntity<?> deleteByQGrDId(@PathVariable("qGrDId") int qGrDId) {
         try {
@@ -256,6 +280,16 @@ public class QuestionController {
             e.printStackTrace();
             return new ResponseEntity<>("DELETE QUESTION FAILED", HttpStatus.BAD_REQUEST );
         }
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("previewLinkExcel/{id}")
+    public ResponseEntity<?> getLinkExcelByQGrD(@PathVariable("id") int id) {
+        if(questionGroupsDetailServiceImp.findLinkExcelByQGRDid(id) != null) {
+            return new ResponseEntity<>("http://localhost:8080/api/file/questionExcel/" +
+                    questionGroupsDetailServiceImp.findLinkExcelByQGRDid(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("FAILED", HttpStatus.BAD_REQUEST);
     }
 
 }

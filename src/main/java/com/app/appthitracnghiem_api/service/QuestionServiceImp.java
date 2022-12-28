@@ -15,4 +15,5 @@ public interface QuestionServiceImp{
     public void saveFileExcel( int qGrDetailId, MultipartFile questionFileExcel);
     public boolean updateFileExcel(int qGrDetailId, MultipartFile questionFileExcel);
     public void deleteQuestionByQGrDetailId(int qGrDetailId);
+
 }
